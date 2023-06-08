@@ -49,13 +49,7 @@ const HomeScreen = () => {
         borderBottomColor: "transparent",
         shadowColor: "transparent",
       },
-     headerRight: () => (
-
-        <FontAwesome 
-        name="list" size={24}
-        color="white"
-        style={{ marginRight: 12 }} />
-      ),
+    
     });
   }, []);
   const customButton = (onConfirm) => {
@@ -206,7 +200,7 @@ const HomeScreen = () => {
             >
               <AntDesign name="hearto" size={24} color="black" />
               <TextInput
-                placeholderTextColor="red"
+                placeholderTextColor="gray"
              
      
         style={styles.input}
@@ -297,4 +291,3 @@ description:
 }
 
 });
-

@@ -4,7 +4,6 @@ import { ModalPortal } from "react-native-modals";
 import { Provider } from "react-redux";
 import StackNavigator from "./StackNavigator";
 import store from "./store";
-
 export default function App() {
   return (
     <>
@@ -22,3 +21,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 });
+
