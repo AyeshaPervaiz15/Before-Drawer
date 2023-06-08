@@ -17,6 +17,9 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 //import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import GiftRecommendationScreen from "./screens/GiftRecommendationScreen";
+
+
 
 
 const StackNavigator = () => {
@@ -119,6 +122,12 @@ const StackNavigator = () => {
         <Stack.Screen name="Login" component={LoginScreen} options={{headerShown:false}}/>
         <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown:false}}/>
         <Stack.Screen name="HomeScreen" component={BottomTabs} options={{headerShown:false}}/>
+        <Stack.Screen
+        name="GiftRecommendation"
+        component={GiftRecommendationScreen}
+        options={{headerShown:true}}
+      />
+    
        
         
       

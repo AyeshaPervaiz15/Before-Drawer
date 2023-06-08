@@ -1,65 +1,227 @@
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button,
+  Image,
+  Alert
+} from "react-native";
+import { AntDesign } from '@expo/vector-icons';
 
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image, SafeAreaView, Dimensions } from 'react-native';
+import React, { useLayoutEffect, useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import Header from "../components/Header";
+import { Feather } from "@expo/vector-icons";
+import { FontAwesome5 } from '@expo/vector-icons';
+import { auth, db } from "../firebase";
+import { FontAwesome } from '@expo/vector-icons';
+import { addDoc, collection } from "firebase/firestore";
+
 
 const SavedScreen = () => {
- 
+  const navigation = useNavigation();
+  const [name, setName] = useState('');
+  const [recipientAge, setRecipientAge] = useState('');
+  const [interest, setInterest] = useState('');
+  const [gift, setGift] = useState('');
 
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
+  const handleAddToWishlist = () => {
+    const collectionRef = collection(db, "wishlist");
+    
+  
+    addDoc(collectionRef, {
+      name,
+      recipientAge,
+      interest,
+      gift,
+    })
+      .then(() => {
+        console.log("Data added to Firestore successfully!");
+        Alert.alert("Success", "Data added to Firestore successfully!");
+        setName('');
+      setRecipientAge('');
+      setInterest('');
+      setGift('');
+        navigation.navigate('Wish', {
+          name: name,
+          recipientAge: recipientAge,
+          interest: interest,
+          gift: gift,
+        });
+      })
+      .catch((error) => {
+        console.error("Error adding data to Firestore: ", error);
+        Alert.alert("Error", "Error adding data to Firestore");
+      });
+  };
+  
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      title: "Recommend a gift",
+      headerTitleStyle: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "white",
+      },
+      headerStyle: {
+        backgroundColor: "#8b0000",
+        height: 110,
+        borderBottomColor: "transparent",
+        shadowColor: "transparent",
+      },
+    });
+  }, []);
 
   return (
-   <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "white",
-        padding: 10,
-        alignItems: "center",
-      }}
-    >
-      <Image source={require('../assets/G3.png')} 
-      style={[styles.image, { width: windowWidth, height: windowHeight }]} 
-      resizeMode="cover" />
+    <>
+      <View>
+        <Header />
 
-      
-    </SafeAreaView>
+        <ScrollView>
+          <View
+            style={{
+              margin: 50,
+              borderColor: "#FFC72C",
+              borderWidth: 3,
+              borderRadius: 6,
+            }}
+          >
+            <Pressable
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                paddingHorizontal: 10,
+                borderColor: "#FFC72C",
+                borderWidth: 2,
+                paddingVertical: 15,
+              }}
+            >
+              <AntDesign name="user" size={24} color="black" />
+              <TextInput
+                style={styles.input}
+                value={name}
+                onChangeText={setName}
+                placeholder="Enter recipient's name"
+              />
+            </Pressable>
+
+            <Pressable
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                paddingHorizontal: 10,
+                borderColor: "#FFC72C",
+                borderWidth: 2,
+                paddingVertical: 15,
+              }}
+            >
+              <Feather name="calendar" size={24} color="black" />
+              <TextInput
+                style={styles.input}
+                value={recipientAge}
+                onChangeText={setRecipientAge}
+                placeholder="Enter recipient's age"
+                keyboardType="numeric"
+              />
+            </Pressable>
+
+            <Pressable
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                paddingHorizontal: 10,
+                borderColor: "#FFC72C",
+                borderWidth: 2,
+                paddingVertical: 15,
+              }}
+            >
+              <AntDesign name="hearto" size={24} color="black" />
+              <TextInput
+                style={styles.input}
+                value={interest}
+                onChangeText={setInterest}
+                placeholder="Enter the interest"
+              />
+            </Pressable>
+
+            <Pressable
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                paddingHorizontal: 10,
+                borderColor: "#FFC72C",
+                borderWidth: 2,
+                paddingVertical: 15,
+              }}
+            >
+              <FontAwesome5 name="gifts" size={24} color="black" />
+              <TextInput
+                style={styles.input}
+                value={gift}
+                onChangeText={setGift}
+                placeholder="Enter the gift name"
+              />
+            </Pressable>
+
+            <Pressable
+              onPress={handleAddToWishlist}
+              style={{
+                paddingHorizontal: 10,
+                borderColor: "#FFC72C",
+                borderWidth: 2,
+                paddingVertical: 15,
+                backgroundColor: "#8b0000",
+              }}
+              disabled={!name || !recipientAge || !interest || !gift}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: 15,
+                  fontWeight: "500",
+                  color: "white",
+                }}
+              >
+                Add to Wishlist
+              </Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      </View>
+    </>
   );
 };
 
+export default SavedScreen;
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ff8c00',
-    padding: 16,
+  title: {
+    color: 'white'
   },
-  image: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    zIndex: -1,
+  description: {
+    color: 'white'
   },
-  heading: {
-    fontSize: 24,
+  questionnaire: {
+    color: '#8b0000',
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
     textAlign: 'center',
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
+    paddingTop: 20,
+    paddingBottom: 0
   },
   input: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 5,
-    marginBottom: 16,
-    paddingHorizontal: 10,
-  },
+    flex: 1,
+    fontSize: 16,
+    paddingLeft: 10,
+    color: "black",
+  }
 });
-
-  
-export default SavedScreen
-
-

@@ -4,7 +4,14 @@ import { ModalPortal } from "react-native-modals";
 import { Provider } from "react-redux";
 import StackNavigator from "./StackNavigator";
 import store from "./store";
+
+import React, { useEffect } from 'react';
+// import giftRecommendationImport from './screens/giftRecommendationImport';
+
 export default function App() {
+  // useEffect(() => {
+  //   giftRecommendationImport();
+  // }, []);
   return (
     <>
       <Provider store={store}>
@@ -21,4 +28,3 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 });
-
